@@ -3,6 +3,17 @@ SkinJob
 
 Final Project for DSE I2100
 
+Instruction
+------------
+1. Download data_helper.py from /src/data
+2. Download model_build_helper.py from /src/model
+3. Download CNN_main jupyter notebook from /src
+4. Upload data_helper.py adn model_build_helper.py to colab /content directory
+5. Update the path input for model.save('/content/') in CNN_main jupyter notebook
+6. Run CNN_main jupyter notebook
+7. A saved CNN model will be in the given path from step 5
+
+
 Project Organization
 ------------
 
