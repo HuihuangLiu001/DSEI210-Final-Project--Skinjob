@@ -29,6 +29,9 @@ from matplotlib.pyplot import imshow
 
 # model builder with tuning
 def model_builder_tuning(hp):
+  '''Take a set a of variables
+    Return a CNN model with EfficientNetB1 ready for training only for 90x90 iamge
+  '''
   inputA = tf.keras.Input(shape=(90, 90, 3))
   inputB = tf.keras.Input(shape=(20,))
   # Create the base model with EfficientNetB1
@@ -61,6 +64,9 @@ def model_builder_tuning(hp):
 
 # model builder with meta data include for CNN
 def model_builder_c(img_shape, nodes, lr):
+  '''Take a set for image shape, a int of nodes and a float for learning rate
+    Return a CNN model with EfficientNetB1 ready for training
+  '''
   inputA = tf.keras.Input(shape=img_shape)
   inputB = tf.keras.Input(shape=(20,))
   # Create the base model with EfficientNetB1
@@ -89,6 +95,9 @@ def model_builder_c(img_shape, nodes, lr):
 
 # model builder without meta data include for CNN
 def model_builder(img_shape, nodes, lr):
+  '''Take a set for image shape, a int of nodes and a float for learning rate
+    Return a CNN model with EfficientNetB1 ready for training
+  '''
   # Create the base model with EfficientNetB1
   base_model = tf.keras.applications.EfficientNetB1(input_shape=img_shape, include_top=False, weights='imagenet', pooling='max')
 
