@@ -20,6 +20,9 @@ from PIL import Image
 # input a dataframe and the size for the marjority
 # output a dataframe with downsample marjority
 def undersample(df, count, rs=42):
+  '''Take a dataframe and numer
+    Return a dataframe that downsample the majority to match the input number
+  '''
   result=[]
   df_group = df.groupby('dx')
   for x in df['dx'].unique():
@@ -36,6 +39,9 @@ def undersample(df, count, rs=42):
 # input a dataframe and the size for the minority
 # output a dataframe with oversampled minority
 def oversample(df, count, rs=42):
+  '''Take a dataframe and numer
+    Return a dataframe that oversample the minorities to match the input number
+  '''
   lst = [df]
   for class_index, group in df.groupby('dx'):
       lst.append(group.sample(count-len(group), replace=True, random_state=rs))
@@ -46,6 +52,10 @@ def oversample(df, count, rs=42):
 # input a dataframe, the image path, the image height and width
 # output a dataframe with image data
 def img_np_convert(df, image_path, h, w):
+  '''Take a dataframe, the image stored path, the height of image and the width
+    of image
+    Return a dataframe with the image data convert from image ID
+  '''
   df['image_id'] = image_path + df['image_id'] +'.jpg'
   df['image'] = df['image_id'].map(lambda x: np.asarray(Image.open(x).resize((h, w))).astype(np.float32))
   return df
@@ -54,6 +64,10 @@ def img_np_convert(df, image_path, h, w):
 # input a dataframe, the image path, the image height and width
 # output a dataframe with image data with normalize pixels
 def img_np_convert_scaled(df, image_path, h, w):
+  '''Take a dataframe, the image stored path, the height of image and the width
+    of image
+    Return a dataframe with the normalized image data convert from image ID
+  '''
   df['image_id'] = image_path + df['image_id'] +'.jpg'
   df['image'] = df['image_id'].map(lambda x: (np.asarray(Image.open(x).resize((h, w)))/255).astype(np.float32))
   return df
@@ -62,7 +76,10 @@ def img_np_convert_scaled(df, image_path, h, w):
 # input dataframe, train size, test size
 # output the train dataframe, test dataframe
 def my_split(df, train_size, test_size, rs=42):
-
+  '''Take a dataframe, the train size and the test size
+    Return two dataframes that split from original dataframe and by the given train
+    test size 
+  '''
   df_train, df_test = train_test_split(df, test_size=test_size, shuffle=True, random_state=rs)
 
   df_train.reset_index(inplace=True)
@@ -73,6 +90,9 @@ def my_split(df, train_size, test_size, rs=42):
 # input the dataframe
 # output the dictionary for class weight and labels
 def weight_cal(df):
+  '''Take a dataframe
+    Return a dictionary for class weight and labels
+  '''
   class_weight={}
   labels = list(df['dx'].unique())
   labels.sort()
@@ -84,6 +104,10 @@ def weight_cal(df):
 # helper function to convert data in dataframe to numpy for training and test
 # for CNN
 def df_to_np1(df):
+  '''Take a dataframe
+    Return a numpy for image data, a numpy for data other than image and a numpy
+    for labels
+  '''
   image = np.asarray(df['image'].to_list())
 
   df_feature = df.iloc[:, 3:-1]
@@ -96,6 +120,9 @@ def df_to_np1(df):
 # helper function to convert data in dataframe to numpy for training and test
 # for sklearn model and DNN
 def df_to_np2(df):
+  '''Take a dataframe
+    Return a numpy for feature data and a numpy for labels
+  '''
   df['image'] = df['image'].map(lambda x : x.flatten())
   i_feature = np.asarray(df['image'].tolist())
   df_feature = df.iloc[:, 3:-1]
@@ -108,6 +135,9 @@ def df_to_np2(df):
 
 # helper function to augment the image by rotate and translate
 def image_augment(df, target, count, size, rs=42):
+  '''Take a dataframe, a list of labels, a number for sample and another for size
+    Return a dataframe with the list of labels being augment by count*size
+  '''
   df_group = df.groupby('dx')
   group = df_group.get_group(target)
   s=group.sample(count, axis=0, random_state=rs)
@@ -131,6 +161,10 @@ def image_augment(df, target, count, size, rs=42):
 
 # combine helper functions for keras CNN
 def prep_pipeline1(df_o, image_path, upper_size, h, w, aug_targets, aug_count, aug_size, rs=42):
+  '''Take a dataframe, image data path, image height, image width, list of labels,
+    the sample to augment, and the size to augment
+    Return a train data set, a test data set, a dictionary for weight and labels
+  '''
   df_o = pd.get_dummies(data=df_o, columns=['dx_type', 'localization'])
   df_u = undersample(df_o, upper_size)
   df_u['age'].fillna(value=int(df_u['age'].mean()), inplace=True)
@@ -151,6 +185,10 @@ def prep_pipeline1(df_o, image_path, upper_size, h, w, aug_targets, aug_count, a
 
 # combine helper functions for sklearn model and dnn
 def prep_pipeline2(df_o, image_path, upper_size, h, w, aug_targets, aug_count, aug_size, rs=42):
+  '''Take a dataframe, image data path, image height, image width, list of labels,
+    the sample to augment, and the size to augment
+    Return a train data set, a test data set, a dictionary for weight and labels
+  '''
   df_o = pd.get_dummies(data=df_o, columns=['dx_type', 'localization'])
   df_u = undersample(df_o, upper_size)
   df_u['age'].fillna(value=int(df_u['age'].mean()), inplace=True)
