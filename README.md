@@ -5,11 +5,13 @@ Final Project for DSE I2100
 
 Instruction
 ------------
-1. Please download the data_helper.py, model_build_hepler.py and CNN_main.ipynp from src folder
-2. Upload the data_helper.py and model_build_hepler.py to /content directory in colab
-3. Update the Path input for model.save() in CNN_main jupyter notebook
-4. Run the CNN_main jupyter notebook
-5. A saved model will be in the path given in step 3
+1. Please download the data_helper.py from src/data folder
+2. Please download model_build_hepler.py from src/models
+3. Please download CNN_main.ipynp from src folder
+4. Upload the data_helper.py and model_build_hepler.py to /content directory in colab
+5. Update the Path input for model.save() in CNN_main jupyter notebook
+6. Run the CNN_main jupyter notebook
+7. A saved model will be in the path given in step 3
 
 Project Organization
 ------------
